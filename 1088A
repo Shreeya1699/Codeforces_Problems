@@ -1,0 +1,35 @@
+#include<bits/stdc++.h>
+#include<iostream>
+#include<string>
+using namespace std;
+
+
+int main(){
+    int x;
+    cin>>x;
+    int a,b;
+    int flag=1;
+    //cout<<x<<"\n";
+
+    for(a=1;a<x;a++){
+        for(b=1;b<a;b++){
+            if(a%b==0 && a*b>x && a/b <x){
+               cout<<a<<" "<<b<<"\n";
+               flag=0;
+               goto label1;
+            }
+            else {
+                flag=1;
+            }
+
+        }
+    }
+    if(flag==1)
+        cout<<"-1";
+    label1:
+        cout<<"";
+
+
+
+    return 0;
+}
