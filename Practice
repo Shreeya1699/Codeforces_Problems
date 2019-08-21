@@ -1,0 +1,425 @@
+ARRAYS
+1
+Naive
+for(int i=0;i<n;i++)
+{
+  for(int j=i+1;j<n;j++){
+    if(data[i]+data[j]==sum)
+      {
+        cout<<"the pair is found at "<<i<<" and "<<j<<" ("<<data[i]<<" + "<<data[j]<<" )\n"<<"or";
+      }
+  }
+}
+
+2 Subarray with sum zero
+  solution
+    naive approach
+    for( int i=0;i<len;i++){
+        int sum=a[i];
+        for(int j=i+1;j<len;j++){
+        sum+=a[j];
+        if(sum==0)
+        {
+          cout<<"{";
+          for(int k=i;k<=j;k++)
+            cout<<a[k]<<",";
+          cout<<"}";
+        }
+       
+       o(n) approach using hashing
+       bool subarrayExists(int A[], int n){
+          unordered_map<int> sumset;
+          sumset.insert(0);
+          int sum=0;
+          for(int i=0;i<n;i++){
+            sum+=A[i];
+            if(sumset.find(sum)!=sumset.end())
+              return true;
+            else
+              sumset.insert(sum);
+          }
+          return false;
+       }
+       
+       if want to print all the possible subsets
+       
+       void printallsubarrays(int A[], int n){
+          unordered_map<int, int> map;
+          map.insert(pair<int,int>(0,-1));
+          int sum=0;
+          for(int i=0;i<n;i++)
+          {   
+            sum+=A[i];
+            if(map.find(sum)!=map.end()){
+                auto it;
+                while(it!=map.end() && it->first==sum){
+                    cout<<it.second+1<<"..."<<i;
+                    it++;
+                    }
+                map.insert(pair<int,int>(sum,i));
+            }
+          }
+       }
+       
+       4. Sort binary array
+        #include<bits/stdc++.h>
+        #include<iostream>
+        #include<string>
+        using namespace std;
+
+        int main(){
+            int arr[]={0,1,0,1,0,0,1,0,1,1,1,0};
+            int len= sizeof(arr)/sizeof(arr[0]);
+            int count0=0;
+            for(int i=0;i<len;i++){
+                if(arr[i]==0)
+                    count0++;
+            }
+            for(int i=0;i<count0;i++){
+                arr[i]=0;
+            }
+            for(int i=count0;i<len;i++){
+                arr[i]=1;
+            }
+            for(int i=0;i<len;i++){
+                cout<<arr[i]<<" , ";
+            }
+        }
+        
+        5. Find duplicate:(elements between 1to n-1)
+          using XOR
+          XOR all the array elements and then XOR 1 to n-1 and then XOR these two the left element will be the one repeated
+          
+        12.
+        int findIndex(int arr[],int n)
+        {
+          int count=0;
+          int prev_zero_index=-1;
+          int max_count=0;
+          int max_index=-1;
+          for(int i=0;i<n;i++)
+          {
+              if(arr[i]==1)
+                count++;
+               else
+               {
+                  count=i-prev_zero_index;
+                  prev_zero_index=i;                  
+               }
+               if(count>max_count){
+                  max_count=count;
+                  max_index=prev_zero_index;
+               }
+          }
+          return max_index;
+        }
+
+q20:
+find maximum difference:
+  int main(){
+    int max_diff=0;
+    int max=arr[n-1];
+    for(int i=n-2;i>0;i--){
+        if(arr[i]>max)
+              max=arr[i];
+        else{
+          diff=max(diff, max-arr[i]);
+        }
+    }
+  }
+  
+  q21: print maximum sum subarray
+  
+  int main(){
+      int max_sofar=0;
+      int max_current=0;
+      int beg,start, end=0;
+      for(int i=0;i<len;i++){
+          max_current +=arr[i];
+          if(max_current<0){
+            max_cuurent=0;
+            beg=i+1;
+      }
+      else {
+          max_sofar= max(max_sofar, max_current)
+          start=beg;
+          end=i;
+        }
+      }
+  
+  }
+  
+  q: to find maximum subarray(circular allowed)
+  find the minimum sum subarray and remove it from the existing subarray
+    invert signs of all the elements and then find the maximum sum subarray(using prev question technique kadane algorithm) and remove it
+    
+    dynamic programming:
+    q: find the shortest supersequence:
+    given 2 strings x, y:
+      case 1:both the string end with same char
+          shortest_superseq(x,y)= shortest_superseq(x(0...m-1), y(0...n-1)) + x(m);
+      case 2: n=both the strings have different char
+          shortest_superseq(x,y)== min(shortest_superseq(x(0...m-1),y(0...n))+ x(m), shortest_superseq(x(0...m),y(0...n-1))+ y(n));
+          
+      int shortestSuperseqLen(string x, string y, int m, int n, auto &lookup){
+        if(m==0 || n==0)
+          return m+n;
+          string key= to_string(m) +"|" + to_string(n);
+          
+          if(x[m-1]==y[n-1])
+            lookup[key]= shortestSuperseqlen(x,y,m-1,n-1,lookup) +1;
+          else
+            lookup[key]=min(shortestSuperseqLen(x,y,m-1,n,lookup) +1, shortestSuperseqLen(x,y,m,n-1, lookup) +1);
+          
+          return lookup[key];
+          }
+          
+          BFS IMPLEMENTATION:
+          
+          struct Edge {
+            int src,dest;
+            };
+            
+           class Graph{
+           public:
+           vector<vector<int>> adjList;
+           Graph(vector<Edge> const &edges, int N){
+            adjList.resize(N);
+            for(auto & edge: edges){
+              adjList[edge.src].push_back(edge.dest);
+              adjList[edge.dest].push_back(edge.src);
+            }
+           }
+           };
+           
+           void BFS( Graph const &graph, int v, vector<bool> &discovered){
+            queue<int> q;
+            discovered[v]=true;
+            q.push[v];
+            while(!q.isEmpty()){
+              v=q.front();
+              q.pop();
+              cout<<v<<" ";
+              for(int u: graph.adjList[v])
+                if(!discovered[u]){
+                  discovered[u]=true;
+                  q.push(u);
+                  }              
+              }
+           }
+           
+           int main(){
+           vector<Edge> edges={ ....};
+           int N=10;
+           Graph graph(edges, N);
+           vector<bool> discovered(N, false);
+           for(int i=0;i<N;i++){
+            if(discovered[i]==false)
+              BFS(graph, i, discovered)
+            }
+           }
+           return 0;
+         }
+         
+         q: closure of a graph
+         
+         #include<bits/stdc++.h>
+#include<iostream>
+using namespace std;
+int main(){
+    int n,e;
+    cin>>n>>e;
+    int graph[n][n];
+    memset(graph,0,sizeof(graph));
+    for(int i=0;i<e;i++){
+        int a,b;
+        cin>>a>>b;
+        graph[a][b]=1;
+
+    }
+
+    int closure[n][n];
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            closure[i][j]=graph[i][j];
+            closure[i][i]=1;
+        }
+    }
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            for(int k=0;k<n;k++){
+                if(closure[i][k]+closure[k][j]>1)
+                    closure[i][j]=1;
+
+            }
+        }
+    }
+
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            cout<<closure[i][j];
+        }
+        cout<<endl;
+    }
+    return 0;
+
+}
+
+
+q. closure
+#include<bits/stdc++.h>
+#include<iostream>
+using namespace std;
+
+void DFS(int n, int matrix[][n],int i, int visited[],int tc[][n]){
+    visited[i]=1;
+    for(int j=0;j<n;j++){
+        if(visited[j]==0 && matrix[i][j]==1){
+            tc[i][j]=1;
+            DFS(n,matrix,j,visited,tc);
+        }
+
+    }
+
+}
+int main(){
+    int n,e;
+    cin>>n>>e;
+    int graph[n][n];
+    memset(graph,0,sizeof(graph));
+    int visited[n];
+    memset(visited,0,sizeof(visited));
+    for(int i=0;i<e;i++){
+        int a,b;
+        cin>>a>>b;
+        graph[a][b]=1;
+
+    }
+    int tc[n][n];
+    memset(tc,0,sizeof(tc));
+    for(int i=0;i<n;i++)
+        tc[i][i]=1;
+
+    for(int i=0;i<n;i++){
+        DFS(n,graph, i,visited,tc);
+    }
+
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            cout<<tc[i][j];
+        }
+        cout<<endl;
+    }
+    return 0;
+
+}
+
+
+Q: find whether the graph is cyclic or not:
+
+#include<bits/stdc++.h>
+using namespace std;
+
+class Graph {
+    int V;
+    list <int> *adjlist;
+    bool isCyclicUtil(int v, bool visited[], bool *recStack);
+  public:
+   void addEdge(int v, int w){
+        adjlist[v].push_back(w);
+   }
+   Graph(int V);
+   bool isCyclic();
+   };
+  
+   Graph :: Graph(int V){
+      this-> V=V;
+      adjlist =new list<int>[V];
+     }
+     
+   bool Graph:: isCyclicUtil(int v, bool visited[], bool *recStack){
+      if(visited[v]==false) {
+          visited[v]=true;
+          recStack[v]=true;
+          list<int> ::iterator i;
+          for(i= adjlist.begin(); i!=adjlist.end();i++){
+              if(visited[*i]==false && isCyclicUtil(*i,visited,recStack)==true)
+                return true;
+              else if(recStack)
+                return true;
+          }
+          recStack[v]= false;
+          return false;          
+      }
+      
+   }
+   
+   bool Graph :: isCyclic(){
+    bool *visited= new bool[V];
+    bool *recStack =new bool[V];
+    for(int i=0;i<V;i++){
+        visited[i]=false;
+        recStack[i]=false;
+    }
+    for(int i=0;i<V;i++)
+        if(isCyclicUtil(i, visited, recStack)
+          return true;
+    return false;
+   }
+   
+ q: coloring approach:
+    three colors:
+    white: if the node is not traversed yet
+    gray: in process
+    black: fully traversed
+    
+    if there is an grey-grey edge: then the cycle exists
+    
+    #include<bits/stdc++.h>
+    using namespace std;
+    enum Color{white, grey, black};
+    class Graph {
+      int V;
+      list <int> *adj;
+      bool dfs(int u, int color[]);
+     public:
+      Graph(int V);
+      void addedges(int v, int w);
+      bool isCyclic();
+    };
+    
+    Graph:: Graph(int V){
+      this-> V=V;
+      adj= new list<int>[V];
+    }
+    void Graph:: addedge(int v, int w){
+      adj[v].push_back(w);
+    }
+
+    bool Graph:: dfs(int u, int color[]){
+      color[u]=grey;
+      list<int>:: iterator i;
+      for(i=adj.begin() ;i!=adj.end();i++){
+      int v=*i;
+      if(color[v]==grey)
+        return true;
+      else if(color[v]==white && dfs(v,color)==true)
+        return true;
+       }
+        color[u]=black;
+        return false;
+    }
+    bool Graph:: isCyclic(){
+      int *color= new int[V];
+      for(int i=0;i<V;i++){
+        color[i]=white;
+      }
+      for(int i=0;i<V;i++)
+        if(color[i]==white)
+          if(dfs(i, color)==true)
+              return true;
+        return false;
+      }
+        
+        
+      
