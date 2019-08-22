@@ -1,0 +1,177 @@
+kruskals Algo:
+
+#include<bits/stdc++.h>
+using namespace std;
+int findparent(int parent[],int i){
+    if(parent[i]==-1)
+      return i;
+    return find(parent,parent[i]);
+}
+
+void union(int parent[],int a, int b){
+    int x= findparent(parent, a);
+    int y=findparent(parent, b);
+    parent[a]=b;
+}
+
+void kruskal(int v, int cost[][v], int parent[]){
+    int min= INT_MAX;
+    int mincost=0;
+    int loopvar=0;
+    int a=-1, b=-1;
+    while(loopvar<v){
+      for(int i=0;i<v;i++){
+        for(int j=0;j<v;j++){
+            if(findparent(parent,i)!=findparent(parent,j) && cost[i][j]<min){
+                min=cost[i][j];
+                a=i;
+                b=j;                
+            }
+         }
+       }
+        union(parent, a, b);
+        mincost +=min;
+        loopvar++;
+     }
+     cout<<mincost;
+}
+
+int main(){
+  int v,e;
+  cin<<v<<e;
+  int cost[v][v];
+  int parent[v];
+  memset(parent,-1;sizeof(parent));
+  memset(cost, INT_MAX,sizeof(cost));
+  for(int i=0;i<e;i++){
+    int t,u,v;
+    cin>>t>>u>>w;
+    cost[t][u]=w;
+  }
+  kruskal(v, cost,parent);
+  return 0;
+}
+
+2. Prims algorithm:
+  #include<bits/stdc++.h>
+  using namespace std;
+  
+  int minKey(int v, int key[],int mstSet[]){
+      int min=INT_MAX;
+      int min_index;
+      for(int i=0;i<v;i++){
+        if(key[i]<min && mstSet[i]==0){
+            min=key[i];
+            min_index=i;
+          }
+     }
+     return i;
+  }
+  void Prim(int v, int matrix[][v]){
+    int parent[v];
+    int keys[v];
+    memset(keys, INF, sizeof(keys));
+    int mstSet[v];
+    memset(mstSet,0,sizeof(mstSet));
+    key[0]=0;
+    mstSet[0]=1;
+    parent[0]=-1;
+    for(int j=0;j<v-1;j++){
+      int u = minKey(v,key,mstSet);
+      mstSet[u]=1;
+      for(int i=0;i<v;i++){
+        if(matrix[u][i]<key[i] && mstSet[i]==0 && matrix[u][i]){
+          parent[i]=u;
+          key[i]=matrix[u][i];
+        }
+      }
+      printmst(parent, matrix);    
+    }
+  }
+  int main(){
+    
+  }
+  
+  3. mergesort:
+  
+  void  merge(int arr[], int l, int mid, int r){
+      int n1=mid-l+1;
+      int n2=r-mid;
+      int left[n1], right[n2];
+      for(int i=0;i<n1;i++){
+        left[i]=arr[l+i];
+      }
+      for(int j=0;j<n2;j++){
+        right[j]=arr[m+l+i];
+      }
+      int i=0,j=0;
+      int k=0;
+      while(i<n1 &&j<n2){
+        if(left[i]<=right[j]){
+            arr[k]=left[i];
+            i++;
+          }
+        else {
+            arr[k]=right[j];
+            j++;
+         }
+           k++;
+      }
+      while(i<n1){
+        arr[k]=left[i];
+        i++;
+        k++;
+      }
+      while(j<n2){
+        arr[k]=right[j];
+        j++;
+        k++;
+      }
+  }
+  
+  void mergesort(int arr[],int l, int r){
+    if(l<r){
+      int mid=l+(l-r)/2;
+      mergesort(arr,l,mid);
+      mergesort(arr,mid+1,r);
+      merge(arr,l,mid,r);
+    }
+  }
+  
+  
+  4. heap implementation:
+  max heap:
+  
+  struct Priority Queue{
+    private:
+      vector <int> A;
+      int parent(int i)
+        return (i-1)/2;
+      int left(int i)
+        return 2*i+1;
+      int right(int i)
+        return 2*i+2;
+        
+      void heapify_down(int i){
+        int left=left(i);
+        int right = right(i);
+        int largest=i;
+        if(left<size() && A[left]> A[largest])
+          largest=left;
+        if(right<size() && A[right]>A[largest])
+          largest=right;
+          
+        if(largest !=i){
+        swap(A[largest], A[i]);
+        heapify_down(largest);
+        }
+      }
+      
+      void heapify_up(int i){
+        if(i && A[parent(i)] >A[i]){
+          swap(A[i], A[parent(i)];
+          heapify_up(parent(i));
+        }
+      }
+  
+  };
